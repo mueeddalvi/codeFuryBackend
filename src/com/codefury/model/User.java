@@ -42,6 +42,51 @@ public class User {
 		this.phone = phone;
 		this.dob = dob;
 	}
+
+	
+	public int getUid() {
+		return uid;
+	}
+
+	public void setUid(int uid) {
+		this.uid = uid;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public String getTypeOfUser() {
+		return typeOfUser;
+	}
+
+	public double getWallet() {
+		return wallet;
+	}
+
+	public long getPhone() {
+		return phone;
+	}
+
+	public LocalDate getDob() {
+		return dob;
+	}
 	
 	
 	
