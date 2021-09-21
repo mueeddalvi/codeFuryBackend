@@ -42,6 +42,17 @@ public class User {
 		this.phone = phone;
 		this.dob = dob;
 	}
+	
+	/*
+	 * CONSTRUCTOR WHEN DISPLAYING SELLER INFO
+	 * */
+	public User(String name, String email,long phone) {
+		this.name = name;
+		this.email = email;
+		this.phone = phone;
+	}
+	
+	
 
 	
 	public int getUid() {
