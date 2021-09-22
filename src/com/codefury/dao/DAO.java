@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.codefury.exceptions.UserAlreadyExists;
 import com.codefury.model.Product;
 import com.codefury.model.User;
 
@@ -38,7 +39,13 @@ public class DAO implements DAOInterface {
 	
 	// Register User
 	// Remaining: Throw user already exists exception
-	public int registerUser(User object) {
+	public int registerUser(User object) throws UserAlreadyExists {
+		
+//		 CHECKS IF USER IS ALREADY PRESENT
+		if(loginUser(object)) { 
+			throw new UserAlreadyExists("User already exists!!");
+		}
+		
 		int result = 0;
 		try {
 		// Set all parameters
@@ -51,7 +58,7 @@ public class DAO implements DAOInterface {
 		*/
 		register.setString(3, object.getEmail());
 		register.setLong(4, object.getPhone());
-		register.setString(5, object.getEmail());
+		register.setString(5, object.getUsername());
 		register.setString(6, object.getPassword());
 		register.setString(7, object.getAddress());
 		register.setString(8, object.getTypeOfUser());
