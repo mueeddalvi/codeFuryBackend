@@ -1,96 +1,88 @@
 package com.codefury.model;
 
-import java.time.LocalDate;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 public class User {
-	private int uid;
-	private String name,email,username,password,address,typeOfUser;
-	private double wallet;
-	private long phone;
-	private LocalDate dob;
+	// Create variables 
+	private int userid;
+	private String name;
+	private Date dateOfBirth;
+	private String email;
+	private String phoneNumber;
+	private String userName;
+	private String password;
+	private String address;
+	private String typeOfUser;
+	private double walletAmount;
+	private Timestamp lastloggedin;
 	
-	/*
-	 * CONSTRUCTOR WHEN TAKING INPUT FROM WEB-APP
-	 * */
-	public User(String name, String email, String username, String password, String address, String typeOfUser,
-			double wallet, long phone, LocalDate dob) {
-		this.name = name;
-		this.email = email;
-		this.username = username;
-		this.password = password;
-		this.address = address;
-		this.typeOfUser = typeOfUser;
-		this.wallet = wallet;
-		this.phone = phone;
-		this.dob = dob;
+	public Timestamp getLastloggedin() {
+		return lastloggedin;
 	}
-
-	/*
-	 * CONSTRUCTOR WHEN DISPLAYING ON WEB-APP
-	 * */
+	public void setLastloggedin(Timestamp lastloggedin) {
+		this.lastloggedin = lastloggedin;
+	}
 	
-	public User(int uid, String name, String email, String username, String password, String address, String typeOfUser,
-			double wallet, long phone, LocalDate dob) {
-		this.uid = uid;
-		this.name = name;
-		this.email = email;
-		this.username = username;
-		this.password = password;
-		this.address = address;
-		this.typeOfUser = typeOfUser;
-		this.wallet = wallet;
-		this.phone = phone;
-		this.dob = dob;
+	// Getter-Setter methods
+	public int getUserid() {
+		return userid;
 	}
-
-	
-	public int getUid() {
-		return uid;
+	public void setUserid(int userid) {
+		this.userid = userid;
 	}
-
-	public void setUid(int uid) {
-		this.uid = uid;
-	}
-
 	public String getName() {
 		return name;
 	}
-
+	public void setName(String name) {
+		this.name = name;
+	}
+	public Date getDateOfBirth() {
+		return dateOfBirth;
+	}
+	public void setDateOfBirth(Date dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
+	}
 	public String getEmail() {
 		return email;
 	}
-
-	public String getUsername() {
-		return username;
+	public void setEmail(String email) {
+		this.email = email;
 	}
-
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 	public String getPassword() {
 		return password;
 	}
-
+	public void setPassword(String password) {
+		this.password = password;
+	}
 	public String getAddress() {
 		return address;
 	}
-
+	public void setAddress(String address) {
+		this.address = address;
+	}
 	public String getTypeOfUser() {
 		return typeOfUser;
 	}
-
-	public double getWallet() {
-		return wallet;
+	public void setTypeOfUser(String typeOfUser) {
+		this.typeOfUser = typeOfUser;
 	}
-
-	public long getPhone() {
-		return phone;
+	public double getWalletAmount() {
+		return walletAmount;
 	}
-
-	public LocalDate getDob() {
-		return dob;
+	public void setWalletAmount(double walletAmount) {
+		this.walletAmount = walletAmount;
 	}
-	
-	
-	
-	
-	
-	
 }

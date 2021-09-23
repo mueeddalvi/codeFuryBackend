@@ -1,21 +1,22 @@
 package com.codefury.dao;
 
 import java.sql.Connection;
+import java.util.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.codefury.exceptions.UserAlreadyExists;
+import com.codefury.exception.IncorrectCredentialsException;
+import com.codefury.exception.UserAlreadyExistsException;
+//Imports from model package
 import com.codefury.model.Product;
 import com.codefury.model.User;
-
-//Imports from model package
 
 public class DAO implements DAOInterface {
 	
 	// Global Statements
-	private PreparedStatement register,login,addProduct;
+	private PreparedStatement register,login,lastloggedin,addProduct,displaySeller,viewProfile;
 	private Connection con;
 	
 	// Define constructor and initialize statements
@@ -28,9 +29,18 @@ public class DAO implements DAOInterface {
 			// Initialize Statements
 			register = con.prepareStatement("insert into users(name, dateofbirth, email, phonenumber, "
 					+ "username, password, address, typeofuser,walletamount) values(?,?,?,?,?,?,?,?,?);");
-			login = con.prepareStatement("select * from users where username=? and password=?");
+			/*
+			register = con.prepareStatement("insert into users(name, email, phonenumber, "
+					+ "username, password, address, typeofuser,walletamount) values(?,?,?,?,?,?,?,?);");
+			*/
+			login = con.prepareStatement("select typeofuser from users where username=? and password=?");
+			viewProfile = con.prepareStatement("select * from users where username=?");
+			lastloggedin = con.prepareStatement("update users set lastloggedin=current_timestamp"
+					+ " where username=?");
 			addProduct = con.prepareStatement("insert into product(productname, category, description, "
 					+ "actualprice, quantity, image, sellerid) values(?,?,?,?,?,?,?)");
+			displaySeller = con.prepareStatement("select name,email,phonenumber,lastloggedin from users where "
+					+ "sellerid=?");
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -38,33 +48,27 @@ public class DAO implements DAOInterface {
 	}
 	
 	// Register User
-	// Remaining: Throw user already exists exception
-	public int registerUser(User object) throws UserAlreadyExists {
-		
-//		 CHECKS IF USER IS ALREADY PRESENT
-		if(loginUser(object)) { 
-			throw new UserAlreadyExists("User already exists!!");
-		}
-		
+	public int registerUser(User object) throws UserAlreadyExistsException{
 		int result = 0;
 		try {
-		// Set all parameters
-		register.setString(1, object.getName());
-		// Assumption: Date comes in the format date and not string
-		register.setDate(2, java.sql.Date.valueOf(object.getDob()));
-		/*
-		str = object.getDateOfBirth();
-		Date date=Date.valueOf(str);  
-		*/
-		register.setString(3, object.getEmail());
-		register.setLong(4, object.getPhone());
-		register.setString(5, object.getUsername());
-		register.setString(6, object.getPassword());
-		register.setString(7, object.getAddress());
-		register.setString(8, object.getTypeOfUser());
-		register.setDouble(9, object.getWallet());
-		result = register.executeUpdate();
-		}
+			viewProfile.setString(1, object.getUserName());
+			ResultSet res = viewProfile.executeQuery();
+			// java.util.Date date=new java.util.Date();   
+			if(res.next()) {
+				throw new UserAlreadyExistsException("Username already exists!");
+			}
+			// Set all parameters
+			register.setString(1, object.getName());
+			register.setDate(2, object.getDateOfBirth());
+			register.setString(3, object.getEmail());
+			register.setString(4, object.getPhoneNumber());
+			register.setString(5, object.getUserName());
+			register.setString(6, object.getPassword());
+			register.setString(7, object.getAddress());
+			register.setString(8, object.getTypeOfUser());
+			register.setDouble(9, object.getWalletAmount());
+			result = register.executeUpdate();
+			}
 		catch(SQLException e) {
 			System.out.println(e);
 		}
@@ -73,15 +77,23 @@ public class DAO implements DAOInterface {
 	
 	// Login User
 	// Remaining: throw user not found exception
-	public boolean loginUser(User object) {
-		boolean result = false;
+	public User loginUser(User object) throws IncorrectCredentialsException {
+		User result = null;
 		try {
-			login.setString(1, object.getUsername());
+			login.setString(1, object.getUserName());
 			login.setString(2, object.getPassword());
 			// Execute query
 			ResultSet res = login.executeQuery();
-			if(res.next())
-				result=true;
+			// java.util.Date date=new java.util.Date();   
+			if(res.next()) {
+				result = new User();
+				lastloggedin.setString(1, object.getUserName());
+				lastloggedin.executeUpdate();
+				result.setTypeOfUser(res.getString(1));
+			}
+			else {
+				throw new IncorrectCredentialsException("Username or password is incorrect");
+			}
 		}
 		catch(SQLException e) {
 			System.out.println(e);
@@ -93,14 +105,14 @@ public class DAO implements DAOInterface {
 	public int addProduct(Product object) {
 		int result = 0;
 		try {
-			addProduct.setString(1, object.getName());
+			addProduct.setString(1, object.getProductname());
 			addProduct.setString(2, object.getCategory());
 			addProduct.setString(3, object.getDescription());
-			addProduct.setDouble(4, object.getActualPrice());
+			addProduct.setDouble(4, object.getActualprice());
 			addProduct.setInt(5, object.getQuantity());
-			addProduct.setString(6, "");
+			addProduct.setString(6, object.getImage());
 			// SellerID from session
-			addProduct.setLong(7, object.getSellerId());
+			addProduct.setInt(7, object.getSellerid());
 			// Execute Query
 			result = addProduct.executeUpdate();
 		}
@@ -108,5 +120,25 @@ public class DAO implements DAOInterface {
 			System.out.println(e);
 		}
 		return result;
+	}
+	
+	// Display seller information
+	public User displaySellerInformation(User obj) {
+		User temp = null;
+		try {
+		displaySeller.setInt(1, obj.getUserid());
+		ResultSet res = displaySeller.executeQuery();
+		if(res.next()) {
+			temp = new User();
+			temp.setName(res.getString(1));
+			temp.setEmail(res.getString(2));
+			temp.setPhoneNumber(res.getString(3));
+			// temp.setLastloggedin(res.getDate(4));
+			}
+		}
+		catch(SQLException e) {
+			System.out.println(e);
+		}
+		return temp;
 	}
 }
