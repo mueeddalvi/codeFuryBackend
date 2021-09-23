@@ -1,9 +1,8 @@
 package com.codefury.service;
 
-import java.util.List;
-
 import com.codefury.exception.IncorrectCredentialsException;
 import com.codefury.exception.UserAlreadyExistsException;
+import com.codefury.model.Auction;
 import com.codefury.model.Product;
 import com.codefury.model.User;
 
@@ -13,8 +12,11 @@ public interface ServiceInterface {
 
 	User login(User object) throws IncorrectCredentialsException;
 
-	void addProduct(Product object);
-	
-	List<Product> retrieveProductsBySeller(int id);
+	int addProduct(Product object);
+
+	User displaySeller(User object);
+
+	int scheduleAuction(Auction auctionobject, User object);
 
 }
+

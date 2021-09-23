@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Buyer Page</title>
 </head>
 <body>
 	<p>Inside the buyer page</p>

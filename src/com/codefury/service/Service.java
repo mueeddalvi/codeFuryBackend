@@ -1,10 +1,9 @@
 package com.codefury.service;
 
-import java.util.List;
-
 import com.codefury.dao.DAOInterface;
 import com.codefury.exception.IncorrectCredentialsException;
 import com.codefury.exception.UserAlreadyExistsException;
+import com.codefury.model.Auction;
 import com.codefury.model.Product;
 import com.codefury.model.User;
 import com.codefury.utility.DAOFactory;
@@ -23,17 +22,16 @@ public class Service implements ServiceInterface {
 	public User login(User object) throws IncorrectCredentialsException {
 		return dao.loginUser(object);
 	}
-
-	@Override
-	public void addProduct(Product object) {
-		// TODO Auto-generated method stub
-		
+	
+	public int addProduct(Product object) {
+		return dao.addProduct(object);
 	}
 
-	@Override
-	public List<Product> retrieveProductsBySeller(int id) {
-		// TODO Auto-generated method stub
-		dao.retrieveProductsBySeller(int id);
-		return null;
+	public User displaySeller(User object) {
+		return dao.displaySeller(object);
+	}
+
+	public int scheduleAuction(Auction auctionobject, User object) {
+		return dao.scheduleAuction(auctionobject, object);
 	}
 }

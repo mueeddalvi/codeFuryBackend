@@ -8,7 +8,7 @@
 	</head>
 	<body>
 	<p>Register Page</p>
-		<form action="RegisterLoginServlet?ac=register" method="post">
+		<form action="GlobalServlet?ac=register" method="post">
 			Name : <input type=text name=name><br>
 			DOB: <input type=text name=dob><br>
 			Email : <input type=email name=email><br>

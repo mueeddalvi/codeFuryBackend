@@ -2,6 +2,8 @@ package com.codefury.dao;
 
 import com.codefury.exception.IncorrectCredentialsException;
 import com.codefury.exception.UserAlreadyExistsException;
+import com.codefury.model.Auction;
+import com.codefury.model.Product;
 import com.codefury.model.User;
 
 public interface DAOInterface {
@@ -10,5 +12,9 @@ public interface DAOInterface {
 
 	public User loginUser(User object) throws IncorrectCredentialsException;
 
-	public void retrieveProductsBySeller(int id);
+	public int addProduct(Product object);
+
+	public User displaySeller(User object);
+
+	public int scheduleAuction(Auction auctionobject, User object);
 }
