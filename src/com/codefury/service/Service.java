@@ -1,5 +1,7 @@
 package com.codefury.service;
 
+import java.util.List;
+
 import com.codefury.dao.DAOInterface;
 import com.codefury.exception.IncorrectCredentialsException;
 import com.codefury.exception.UserAlreadyExistsException;
@@ -26,5 +28,12 @@ public class Service implements ServiceInterface {
 	public void addProduct(Product object) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<Product> retrieveProductsBySeller(int id) {
+		// TODO Auto-generated method stub
+		dao.retrieveProductsBySeller(int id);
+		return null;
 	}
 }

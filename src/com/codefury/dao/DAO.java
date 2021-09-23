@@ -1,7 +1,9 @@
 package com.codefury.dao;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +18,7 @@ import com.codefury.model.User;
 public class DAO implements DAOInterface {
 	
 	// Global Statements
-	private PreparedStatement register,login,lastloggedin,addProduct,displaySeller,viewProfile;
+	private PreparedStatement register,login,lastloggedin,addProduct,displaySeller,viewProfile, retrieveByProductsId;
 	private Connection con;
 	
 	// Define constructor and initialize statements
@@ -41,6 +43,9 @@ public class DAO implements DAOInterface {
 					+ "actualprice, quantity, image, sellerid) values(?,?,?,?,?,?,?)");
 			displaySeller = con.prepareStatement("select name,email,phonenumber,lastloggedin from users where "
 					+ "sellerid=?");
+			
+			retrieveByProductsId=con.prepareStatement("select product.productname from product inner join"
+					+" users on product.sellerid=?");
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -140,5 +145,18 @@ public class DAO implements DAOInterface {
 			System.out.println(e);
 		}
 		return temp;
+	}
+
+	@Override
+	public void retrieveProductsBySeller(int id) {
+		// TODO Auto-generated method stub
+		List<String> result=new ArrayList<String>();
+		retrieveByProductsId.setInt(1,id);
+		ResultSet res=retrieveByProductsId.executeQuery();
+		while(res.next()) {
+			result.add(res.getString(1));
+		}
+		
+		
 	}
 }

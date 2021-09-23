@@ -9,4 +9,6 @@ public interface DAOInterface {
 	public int registerUser(User object) throws UserAlreadyExistsException;
 
 	public User loginUser(User object) throws IncorrectCredentialsException;
+
+	public void retrieveProductsBySeller(int id);
 }

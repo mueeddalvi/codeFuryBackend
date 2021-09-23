@@ -34,7 +34,7 @@ CREATE TABLE `product` (
   UNIQUE KEY `productid` (`productid`),
   KEY `sellerid` (`sellerid`),
   CONSTRAINT `product_ibfk_1` FOREIGN KEY (`sellerid`) REFERENCES `users` (`userid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
