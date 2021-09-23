@@ -6,9 +6,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 import com.codefury.exception.IncorrectCredentialsException;
 import com.codefury.exception.UserAlreadyExistsException;
+import com.codefury.model.Auction;
 //Imports from model package
 import com.codefury.model.Product;
 import com.codefury.model.User;
@@ -16,7 +18,7 @@ import com.codefury.model.User;
 public class DAO implements DAOInterface {
 	
 	// Global Statements
-	private PreparedStatement register,login,lastloggedin,addProduct,displaySeller,viewProfile;
+	private PreparedStatement register,login,lastloggedin,addProduct,displaySeller,viewProfile,findSellerId,scheduleAuction;
 	private Connection con;
 	
 	// Define constructor and initialize statements
@@ -33,14 +35,16 @@ public class DAO implements DAOInterface {
 			register = con.prepareStatement("insert into users(name, email, phonenumber, "
 					+ "username, password, address, typeofuser,walletamount) values(?,?,?,?,?,?,?,?);");
 			*/
-			login = con.prepareStatement("select typeofuser from users where username=? and password=?");
+			login = con.prepareStatement("select typeofuser,userid from users where username=? and password=?");
 			viewProfile = con.prepareStatement("select * from users where username=?");
 			lastloggedin = con.prepareStatement("update users set lastloggedin=current_timestamp"
 					+ " where username=?");
 			addProduct = con.prepareStatement("insert into product(productname, category, description, "
 					+ "actualprice, quantity, image, sellerid) values(?,?,?,?,?,?,?)");
 			displaySeller = con.prepareStatement("select name,email,phonenumber,lastloggedin from users where "
-					+ "sellerid=?");
+					+ "userid=?");
+			findSellerId = con.prepareStatement("select productid from product where sellerid=? and productname=?");
+			scheduleAuction = con.prepareStatement("insert into auction(minimumbidvalue, bidstart, bidend, productid) values(?,?,?,?)");
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -90,6 +94,7 @@ public class DAO implements DAOInterface {
 				lastloggedin.setString(1, object.getUserName());
 				lastloggedin.executeUpdate();
 				result.setTypeOfUser(res.getString(1));
+				result.setUserid(res.getInt(2));
 			}
 			else {
 				throw new IncorrectCredentialsException("Username or password is incorrect");
@@ -123,7 +128,7 @@ public class DAO implements DAOInterface {
 	}
 	
 	// Display seller information
-	public User displaySellerInformation(User obj) {
+	public User displaySeller(User obj) {
 		User temp = null;
 		try {
 		displaySeller.setInt(1, obj.getUserid());
@@ -133,12 +138,30 @@ public class DAO implements DAOInterface {
 			temp.setName(res.getString(1));
 			temp.setEmail(res.getString(2));
 			temp.setPhoneNumber(res.getString(3));
-			// temp.setLastloggedin(res.getDate(4));
+			temp.setLastloggedin(res.getTimestamp(4));
 			}
 		}
 		catch(SQLException e) {
 			System.out.println(e);
 		}
 		return temp;
+	}
+	
+	public int scheduleAuction(Auction auctionobject, User object) {
+		int result = 0;
+		try {
+			// findSellerId.setInt(1, x);
+			
+			scheduleAuction.setDouble(1, auctionobject.getMinimumbid());
+			scheduleAuction.setDate(2, auctionobject.getBidstart());
+			scheduleAuction.setDate(3, auctionobject.getBidend());
+			scheduleAuction.setInt(4, object.getUserid());
+			scheduleAuction.setString(5, auctionobject.getProductname());
+			result = scheduleAuction.executeUpdate();
+		}
+		catch(SQLException e) {
+			System.out.println(e);
+		}
+		return result;
 	}
 }
