@@ -15,6 +15,8 @@ public interface ServiceInterface {
 	int addProduct(Product object);
 
 	User displaySeller(User object);
+	
+	boolean getProducts(int id);
 
 	int scheduleAuction(Auction auctionobject, User object);
 

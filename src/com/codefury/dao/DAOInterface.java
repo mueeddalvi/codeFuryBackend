@@ -15,6 +15,8 @@ public interface DAOInterface {
 	public int addProduct(Product object);
 
 	public User displaySeller(User object);
+	
+	public boolean displayProdInfoForSeller(int id);
 
 	public int scheduleAuction(Auction auctionobject, User object);
 }
