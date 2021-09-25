@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8" isELIgnored="false"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -21,6 +21,11 @@
 		<form action="GlobalServlet?ac=displayseller" method="post">
 			<input type=submit value=Display>
 		</form>
+		
+		Name: ${ object.name } <br>
+		Email: is ${ object.email } <br>
+		Phone Number: is ${ object.phoneNumber } <br>
+		Last Logged-in is ${ object.lastloggedin }
 		
 		<form action="GlobalServlet?ac=scheduleauction" method="post">
 			Product : <input type=text name=productname><br>

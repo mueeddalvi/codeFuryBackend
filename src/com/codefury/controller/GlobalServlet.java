@@ -2,6 +2,7 @@ package com.codefury.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -189,19 +190,19 @@ public class GlobalServlet extends HttpServlet {
 			object.setUserid(userid);
 			User result = serviceinterface.displaySeller(object);
 			if (result != null) {
-				System.out.println(result.getName() + " " + result.getName() + " " + result.getPhoneNumber() + " "
+				/*
+				System.out.println(result.getName() + " " + result.getEmail() + " " + result.getPhoneNumber() + " "
 						+ result.getLastloggedin());
+				*/
+				request.setAttribute("object", result);
+				RequestDispatcher rd=getServletContext().getRequestDispatcher("/Seller.jsp");
+				rd.forward(request, response);
 			}
 		}
 
 		if (option.equalsIgnoreCase("displaysellerproducts")) {
-			// Get id from session
-			//HttpSession session = request.getSession(false);
-			//Integer userid = (Integer) session.getAttribute("user");
-			// System.out.println(userid);
-			// Create data object
-
 			// Check type of user is seller
+			// Add the user type in session
 			String typeOfUser = request.getParameter("type");
 			if (!"seller".equalsIgnoreCase(typeOfUser)) {
 				out.println("<script type=\"text/javascript\">");
@@ -212,9 +213,11 @@ public class GlobalServlet extends HttpServlet {
 
 			String sellId = request.getParameter("userId");
 			int sid = Integer.parseInt(sellId);
-			boolean result = serviceinterface.getProducts(sid);
-			if (result != false) {
-				request.getSession(true);
+			List<User> result = serviceinterface.getProducts(sid);
+			if (result != null) {
+				for(User temp:result) {
+					System.out.println();
+				}
 			}
 		}
 
